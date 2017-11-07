@@ -1,0 +1,165 @@
+Sub WriteData()
+    k = 2
+    pdata = InputBox("Enter data start row,location,author: ")
+    parr = Split(pdata, ",")
+    st = parr(0)
+    locn = parr(1)
+    autho = parr(2)
+    totalCount = Worksheets("Old format").Cells(Worksheets("Old format").Rows.Count, "A").End(xlUp).Row
+    For i = st To totalCount
+        steps = Worksheets("Old format").Range("D" & CStr(i)).Value
+        stepar = Split(steps, Chr(10))
+        n = UBound(stepar) - LBound(stepar) + 1
+        If stepar(n - 1) = "" Then
+            n = n - 1
+        End If
+        For j = 0 To n - 1
+            Dim objRegex As Object
+            Set objRegex = CreateObject("vbscript.regexp")
+            With objRegex
+                .Pattern = "^(?:[1-9]|0[1-9]|1[0-9]|20)\.\s*"
+                .ignorecase = True
+                stepnew = .Replace(stepar(j), vbNullString)
+            End With
+            Worksheets("New format").Range("G" & CStr(k)).Value = stepnew
+            Worksheets("New format").Range("F" & CStr(k)).Value = "Step " & CStr(j + 1)
+            If j = 0 Then
+                Worksheets("New format").Range("B" & CStr(k)).Value = "Manual"
+                Worksheets("New format").Range("C" & CStr(k)).Value = autho
+                Worksheets("New format").Range("D" & CStr(k)).Value = Worksheets("Old format").Range("C" & CStr(i)).Value
+                Worksheets("New format").Range("E" & CStr(k)).Value = Worksheets("Old format").Range("A5").Value
+                Worksheets("New format").Range("A" & CStr(k)).Value = locn
+            End If
+            k = k + 1
+        Next j
+        Worksheets("New format").Range("H" & CStr(k - 1)).Value = Worksheets("Old format").Range("F" & CStr(i)).Value
+    Next i
+    AddNumbering
+End Sub
+
+Sub WriteData2()
+    k = 2
+    pdata = InputBox("Enter data start row,location,author: ")
+    parr = Split(pdata, ",")
+    st = parr(0)
+    locn = parr(1)
+    autho = parr(2)
+    totalCount = Worksheets("Old format").Cells(Worksheets("Old format").Rows.Count, "A").End(xlUp).Row
+    For i = st To totalCount
+        steps = Worksheets("Old format").Range("E" & CStr(i)).Value
+        stepar = Split(steps, Chr(10))
+        n = UBound(stepar) - LBound(stepar) + 1
+        If stepar(n - 1) = "" Then
+            n = n - 1
+        End If
+        For j = 0 To n - 1
+            Dim objRegex As Object
+            Set objRegex = CreateObject("vbscript.regexp")
+            With objRegex
+                .Pattern = "^(?:[1-9]|0[1-9]|1[0-9]|20)\.\s*"
+                .ignorecase = True
+                stepnew = .Replace(stepar(j), vbNullString)
+            End With
+            Worksheets("New format").Range("G" & CStr(k)).Value = stepnew
+            Worksheets("New format").Range("F" & CStr(k)).Value = "Step " & CStr(j + 1)
+            If j = 0 Then
+                Worksheets("New format").Range("B" & CStr(k)).Value = "Manual"
+                Worksheets("New format").Range("C" & CStr(k)).Value = autho
+                Worksheets("New format").Range("D" & CStr(k)).Value = Worksheets("Old format").Range("C" & CStr(i)).Value
+                Worksheets("New format").Range("E" & CStr(k)).Value = Worksheets("Old format").Range("D" & CStr(i)).Value
+                Worksheets("New format").Range("A" & CStr(k)).Value = locn
+            End If
+            k = k + 1
+        Next j
+        Worksheets("New format").Range("H" & CStr(k - 1)).Value = Worksheets("Old format").Range("G" & CStr(i)).Value
+    Next i
+    AddNumbering
+End Sub
+
+Sub WriteData3()
+    k = 2
+    pdata = InputBox("Enter data start row,location,author: ")
+    parr = Split(pdata, ",")
+    st = parr(0)
+    locn = parr(1)
+    autho = parr(2)
+    totalCount = Worksheets("Old format").Cells(Worksheets("Old format").Rows.Count, "A").End(xlUp).Row
+    For i = st To totalCount
+        steps = Worksheets("Old format").Range("E" & CStr(i)).Value
+        stepar = Split(steps, Chr(10))
+        n = UBound(stepar) - LBound(stepar) + 1
+        If stepar(n - 1) = "" Then
+            n = n - 1
+        End If
+        For j = 0 To n - 1
+            Dim objRegex As Object
+            Set objRegex = CreateObject("vbscript.regexp")
+            With objRegex
+                .Pattern = "^(?:[1-9]|0[1-9]|1[0-9]|20)\.\s*"
+                .ignorecase = True
+                stepnew = .Replace(stepar(j), vbNullString)
+            End With
+            Worksheets("New format").Range("G" & CStr(k)).Value = stepnew
+            Worksheets("New format").Range("F" & CStr(k)).Value = "Step " & CStr(j + 1)
+            If j = 0 Then
+                Worksheets("New format").Range("B" & CStr(k)).Value = "Manual"
+                Worksheets("New format").Range("C" & CStr(k)).Value = autho
+                Worksheets("New format").Range("D" & CStr(k)).Value = Worksheets("Old format").Range("D" & CStr(i)).Value
+                Worksheets("New format").Range("E" & CStr(k)).Value = Worksheets("Old format").Range("C" & CStr(i)).Value
+                Worksheets("New format").Range("A" & CStr(k)).Value = locn
+            End If
+            k = k + 1
+        Next j
+        Worksheets("New format").Range("H" & CStr(k - 1)).Value = Worksheets("Old format").Range("G" & CStr(i)).Value
+    Next i
+    AddNumbering
+End Sub
+
+Sub AddNumbering()
+    i = 2
+    k = 1
+    testCount = Worksheets("New format").Evaluate("CountA(D:D)")
+    totalCount = Worksheets("New format").Cells(Worksheets("New format").Rows.Count, "F").End(xlUp).Row
+    If testCount = 1 Then
+        Exit Sub
+    End If
+    Do While i <= totalCount
+        If k < 10 Then
+            Prefix = "000"
+        End If
+        If k > 9 And i < 100 Then
+            Prefix = "00"
+        End If
+        If k > 99 And i < 1000 Then
+            Prefix = "0"
+        End If
+        stepcellName = "F" & CStr(i)
+        If IsEmpty(Worksheets("New format").Range(stepcellName).Value) = True Then
+                emptyRows = emptyRows & ", " & CStr(i)
+        End If
+        If Worksheets("New format").Range(stepcellName).Value = "Step 1" Then
+            testcellName = "D" & CStr(i)
+            strIn = Worksheets("New format").Range(testcellName).Value
+            Dim objRegex As Object
+            Set objRegex = CreateObject("vbscript.regexp")
+            'to remove existing numbering, if any
+            With objRegex
+                .Pattern = "^.+\.\s+"
+                .ignorecase = True
+                stripChars = .Replace(strIn, vbNullString)
+                Worksheets("New format").Range(testcellName).Value = stripChars
+            End With
+            Worksheets("New format").Range(testcellName).Value = Prefix & k & ". " & Worksheets("New format").Range(testcellName).Value
+            k = k + 1
+        End If
+        i = i + 1
+    Loop
+    'Worksheets("Old format").Activate
+    If IsEmpty(emptyRows) = False Then
+        emptyRows = Right(emptyRows, Len(emptyRows) - 1)
+    End If
+    MsgBox ("Number of test cases detected = " & CStr(testCount - 1) & vbCrLf & "Last test case numbered = " & Worksheets("New format").Range(testcellName).Value & vbCrLf & vbCrLf & "Empty row# =" & emptyRows)
+End Sub
+
+
+
